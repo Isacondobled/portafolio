@@ -7,6 +7,12 @@ Incluye contenido bilingüe ES/EN, tema claro/oscuro, CV web imprimible y una
 sección breve sobre prácticas de trabajo con **SDD (Spec-Driven Development)**,
 sin presentarlo como una metodología obligatoria para todos los proyectos.
 
+## En vivo
+
+<https://isacondobled.github.io/portafolio/>
+
+Publicado con GitHub Pages desde la rama `main` / raíz del repositorio.
+
 ## Ver en local
 
 Desde la carpeta del proyecto:
