@@ -1,0 +1,35 @@
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Entornos y dependencias
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Configuración y secretos
+.env
+.env.*
+config.json
+*.key
+*.pem
+
+# Datos operativos
+logs/
+respaldo/
+salida/
+pdf/
+revision/
+*.bak
+*.xlsx
+*.csv
+*.docx
+*.sql
+*.rar
+*.zip
+
+# Temporales
+*.tmp
+*.log

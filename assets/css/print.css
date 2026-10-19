@@ -1,0 +1,136 @@
+@media print {
+  @page {
+    size: letter;
+    margin: 14mm;
+  }
+
+  :root {
+    --ink: #111820;
+    --ink-muted: #34414d;
+    --ink-faint: #5c6975;
+    --border: #c9d2da;
+    --surface: #ffffff;
+    --surface-2: #ffffff;
+    --bg: #ffffff;
+    --brand: #1f3a5f;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111820;
+    font-size: 10.5pt;
+  }
+
+  .site-header,
+  .site-footer,
+  .skip-link,
+  .toast-stack,
+  .modal-layer,
+  .cv-toolbar,
+  .no-print {
+    display: none !important;
+  }
+
+  .cv-page {
+    padding: 0;
+  }
+
+  .cv-paper {
+    max-width: none;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .cv-head {
+    grid-template-columns: 1fr auto;
+  }
+
+  .cv-section {
+    break-inside: avoid;
+  }
+
+  .cv-entry {
+    break-inside: avoid;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+@media print {
+  .pdf-doc {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .demo-topbar,
+  .demo-disclaimer,
+  .demo-page-head,
+  .demo-actions,
+  .demo-panel-head .btn,
+  .modal-head,
+  .modal-foot {
+    display: none !important;
+  }
+}
+
+
+@media print {
+  body.print-pdf {
+    background: #fff !important;
+  }
+
+  body.print-pdf .demo-topbar,
+  body.print-pdf .demo-disclaimer,
+  body.print-pdf .demo-main,
+  body.print-pdf .toast-stack,
+  body.print-pdf .site-header,
+  body.print-pdf .site-footer {
+    display: none !important;
+  }
+
+  body.print-pdf .modal-layer {
+    display: grid !important;
+    position: static !important;
+    inset: auto !important;
+    padding: 0 !important;
+    background: #fff !important;
+    backdrop-filter: none !important;
+  }
+
+  body.print-pdf .modal-box {
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  body.print-pdf .modal-head,
+  body.print-pdf .modal-foot {
+    display: none !important;
+  }
+
+  body.print-pdf .modal-body {
+    padding: 0 !important;
+  }
+
+  body.print-pdf .pdf-doc {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}

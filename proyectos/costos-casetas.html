@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Costos de casetas — Demo de portafolio</title>
+  <meta name="description" content="Demo interactiva de un pipeline mensual de costos de casetas: ingesta, cálculo con IQR y medianas, revisión manual y plan de depuración. Datos ficticios.">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <script src="../assets/js/theme-init.js"></script>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/demos.css">
+  <link rel="stylesheet" href="../assets/css/print.css">
+</head>
+<body class="demo-body">
+  <header class="demo-topbar">
+    <div class="demo-topbar-inner">
+      <a class="demo-brand" href="../index.html">
+        <span class="demo-brand-mark">CC</span>
+        <span class="demo-brand-text">
+          <strong>Costos de casetas</strong>
+          <span data-es="Demo de portafolio" data-en="Portfolio demo">Demo de portafolio</span>
+        </span>
+      </a>
+      <div class="demo-topbar-actions">
+        <a class="demo-back" href="../index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+          <span data-es="Portafolio" data-en="Portfolio">Portafolio</span>
+        </a>
+        <button class="icon-btn" type="button" data-tech-open aria-label="Resumen técnico" title="Resumen técnico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg>
+        </button>
+        <div class="lang-toggle" role="group" aria-label="Idioma">
+          <button type="button" data-lang-btn="es" aria-pressed="true">ES</button>
+          <button type="button" data-lang-btn="en" aria-pressed="false">EN</button>
+        </div>
+        <button class="icon-btn" type="button" data-theme-toggle aria-label="Cambiar tema">
+          <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8Z"/></svg>
+          <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="demo-disclaimer">
+    <div class="demo-disclaimer-inner">
+      <span><strong data-es="Datos ficticios." data-en="Fictional data.">Datos ficticios.</strong> <span data-es="Sin conexión a bases de datos ni archivos reales." data-en="No connection to databases or real files.">Sin conexión a bases de datos ni archivos reales.</span></span>
+      <span class="disc-note" data-es="Demo interactiva" data-en="Interactive demo">Demo interactiva</span>
+    </div>
+  </div>
+
+  <main class="demo-main demo-main-narrow">
+    <div class="demo-page-head">
+      <div>
+        <span class="demo-kicker" data-es="Demo · Automatización mensual" data-en="Demo · Monthly automation">Demo · Automatización mensual</span>
+        <h1 class="demo-title" data-es="Costos de casetas por ruta y armado" data-en="Toll costs by route and configuration">Costos de casetas por ruta y armado</h1>
+        <p class="demo-subtitle" data-es="Ingesta del pase, cálculo con IQR y medianas, revisión manual y plan de depuración con validación dry-run." data-en="Pass ingestion, IQR and median calculation, manual review and a cleanup plan with dry-run validation.">Ingesta del pase, cálculo con IQR y medianas, revisión manual y plan de depuración con validación dry-run.</p>
+      </div>
+      <div class="demo-actions">
+        <button class="btn btn-secondary btn-sm" type="button" id="cas-reset">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          <span data-es="Reiniciar demo" data-en="Reset demo">Reiniciar demo</span>
+        </button>
+        <button class="btn btn-secondary btn-sm" type="button" data-tech-open>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg>
+          <span data-es="Resumen técnico" data-en="Technical summary">Resumen técnico</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="wizard-steps" id="cas-steps">
+      <div class="wizard-step is-current" data-step-indicator="1"><span class="num">1</span><span data-es="Cargar pase" data-en="Upload pass">Cargar pase</span></div>
+      <div class="wizard-step" data-step-indicator="2"><span class="num">2</span><span data-es="Calcular" data-en="Calculate">Calcular</span></div>
+      <div class="wizard-step" data-step-indicator="3"><span class="num">3</span><span data-es="Revisar" data-en="Review">Revisar</span></div>
+      <div class="wizard-step" data-step-indicator="4"><span class="num">4</span><span data-es="Ejecutar" data-en="Run">Ejecutar</span></div>
+    </div>
+
+    <section class="wizard-card" id="cas-step-1">
+      <h2 data-es="1. Cargar el pase del mes" data-en="1. Upload the monthly pass">1. Cargar el pase del mes</h2>
+      <p class="lead" data-es="El proceso valida el archivo del mes anterior y bloquea la carga si ya existe un pase con el mismo periodo." data-en="The process validates the previous month’s file and blocks the upload if a pass for the same period already exists.">El proceso valida el archivo del mes anterior y bloquea la carga si ya existe un pase con el mismo periodo.</p>
+      <div class="drop-zone" id="cas-drop">
+        <span class="drop-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+        </span>
+        <strong data-es="Arrastra el archivo .xlsx del pase" data-en="Drag the .xlsx pass file">Arrastra el archivo .xlsx del pase</strong>
+        <span data-es="o selecciona un archivo desde tu equipo" data-en="or select a file from your computer">o selecciona un archivo desde tu equipo</span>
+        <div class="row-actions" style="margin-top:8px">
+          <button class="btn btn-secondary btn-sm" type="button" id="cas-pick-file" data-es="Seleccionar archivo" data-en="Select file">Seleccionar archivo</button>
+          <button class="btn btn-secondary btn-sm" type="button" id="cas-sample-file" data-es="Usar archivo de ejemplo" data-en="Use sample file">Usar archivo de ejemplo</button>
+        </div>
+        <input type="file" id="cas-file" accept=".xlsx" hidden>
+      </div>
+      <div id="cas-file-info"></div>
+      <div class="info-note" style="margin-top:16px">
+        <strong data-es="Periodo detectado:" data-en="Detected period:">Periodo detectado:</strong>
+        <span data-es="Septiembre 2026 · archivo del mes anterior." data-en="September 2026 · previous month’s file.">Septiembre 2026 · archivo del mes anterior.</span>
+      </div>
+      <div class="demo-actions" style="margin-top:20px">
+        <button class="btn" type="button" id="cas-to-step-2" disabled>
+          <span data-es="Continuar al cálculo" data-en="Continue to calculation">Continuar al cálculo</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="wizard-card" id="cas-step-2" hidden>
+      <h2 data-es="2. Calcular resultados" data-en="2. Calculate results">2. Calcular resultados</h2>
+      <p class="lead" data-es="El cálculo corre las fases 0 a 5a en modo dry-run. No escribe en la base de datos." data-en="The calculation runs phases 0 to 5a in dry-run mode. It does not write to the database.">El cálculo corre las fases 0 a 5a en modo dry-run. No escribe en la base de datos.</p>
+      <div id="cas-file-chip" style="margin:14px 0"></div>
+      <div class="progress-track" style="margin:18px 0 10px"><span class="progress-fill" id="cas-progress" style="width:0%"></span></div>
+      <div class="phase-list" id="cas-phases"></div>
+      <div id="cas-calc-summary"></div>
+      <div class="demo-actions" style="margin-top:20px">
+        <button class="btn btn-secondary" type="button" data-cas-step="1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+          <span data-es="Volver" data-en="Back">Volver</span>
+        </button>
+        <button class="btn" type="button" id="cas-calc-btn">
+          <span data-es="Calcular" data-en="Calculate">Calcular</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v4M3 5h4M6 17v4M4 19h4M13 3l2.5 5.5L21 11l-5.5 2.5L13 19l-2.5-5.5L5 11l5.5-2.5L13 3Z"/></svg>
+        </button>
+        <button class="btn" type="button" id="cas-to-step-3" disabled>
+          <span data-es="Ir a revisar" data-en="Go to review">Ir a revisar</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="wizard-card" id="cas-step-3" hidden>
+      <h2 data-es="3. Revisar casos manuales" data-en="3. Review manual cases">3. Revisar casos manuales</h2>
+      <p class="lead" data-es="El sistema marca como INDETERMINADO los casos donde la evidencia es mixta o insuficiente. Tú decides qué hacer con ellos." data-en="The system flags cases with mixed or insufficient evidence as INDETERMINATE. You decide what to do with them.">El sistema marca como INDETERMINADO los casos donde la evidencia es mixta o insuficiente. Tú decides qué hacer con ellos.</p>
+      <label class="tiny muted" style="display:flex;gap:8px;align-items:center;margin:14px 0">
+        <input type="checkbox" id="cas-include-sin">
+        <span data-es="Incluir también las rutas marcadas automáticamente como SIN CASETAS" data-en="Also include routes automatically flagged as NO TOLLS">Incluir también las rutas marcadas automáticamente como SIN CASETAS</span>
+      </label>
+      <div class="table-wrap">
+        <table class="data-table review-table">
+          <thead>
+            <tr>
+              <th data-es="Ruta" data-en="Route">Ruta</th>
+              <th data-es="Descripción" data-en="Description">Descripción</th>
+              <th data-es="Unidad" data-en="Unit">Unidad</th>
+              <th data-es="Armado" data-en="Configuration">Armado</th>
+              <th class="num" data-es="Mediana" data-en="Median">Mediana</th>
+              <th class="center" data-es="Viajes" data-en="Trips">Viajes</th>
+              <th data-es="Confianza" data-en="Confidence">Confianza</th>
+              <th data-es="Decisión" data-en="Decision">Decisión</th>
+              <th data-es="Costo manual" data-en="Manual cost">Costo manual</th>
+            </tr>
+          </thead>
+          <tbody id="cas-review-body"></tbody>
+        </table>
+      </div>
+      <div class="demo-actions" style="margin-top:16px">
+        <button class="btn btn-secondary btn-sm" type="button" id="cas-fill-median" data-es="Usar mediana en pendientes" data-en="Use median for pending">Usar mediana en pendientes</button>
+        <span class="tiny muted" id="cas-pending"></span>
+      </div>
+      <div class="demo-actions" style="margin-top:20px">
+        <button class="btn btn-secondary" type="button" data-cas-step="2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+          <span data-es="Volver" data-en="Back">Volver</span>
+        </button>
+        <button class="btn" type="button" id="cas-to-step-4" disabled>
+          <span data-es="Ir a ejecutar" data-en="Go to run">Ir a ejecutar</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="wizard-card" id="cas-step-4" hidden>
+      <h2 data-es="4. Ejecutar la depuración" data-en="4. Run the cleanup">4. Ejecutar la depuración</h2>
+      <p class="lead" data-es="La compuerta exige 0 sobreescrituras y una diferencia estimada menor al 5%. La escritura real solo ocurre tras la confirmación." data-en="The gate requires 0 overwrites and an estimated difference below 5%. The actual write only happens after confirmation.">La compuerta exige 0 sobreescrituras y una diferencia estimada menor al 5%. La escritura real solo ocurre tras la confirmación.</p>
+      <div id="cas-plan"></div>
+      <div id="cas-apply-status"></div>
+      <div class="demo-actions" style="margin-top:20px">
+        <button class="btn btn-secondary" type="button" data-cas-step="3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+          <span data-es="Volver a revisar" data-en="Back to review">Volver a revisar</span>
+        </button>
+        <button class="btn" type="button" id="cas-apply">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+          <span data-es="Aplicar cambios" data-en="Apply changes">Aplicar cambios</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="cas-results" hidden></section>
+  </main>
+
+  <div class="toast-stack" aria-live="polite"></div>
+
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/ui.js"></script>
+  <script src="../assets/js/mock-data.js"></script>
+  <script src="../assets/js/casetas.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

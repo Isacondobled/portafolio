@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentador de evidencias — Demo de portafolio</title>
+  <meta name="description" content="Demo interactiva de un flujo de validación documental de viajes con roles, evidencias, comprobaciones, repartos y reembarques. Datos ficticios.">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <script src="../assets/js/theme-init.js"></script>
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/demos.css">
+  <link rel="stylesheet" href="../assets/css/print.css">
+</head>
+<body class="demo-body">
+  <header class="demo-topbar">
+    <div class="demo-topbar-inner">
+      <a class="demo-brand" href="../index.html">
+        <span class="demo-brand-mark">DA</span>
+        <span class="demo-brand-text">
+          <strong>Documentador ATQ</strong>
+          <span data-es="Demo de portafolio" data-en="Portfolio demo">Demo de portafolio</span>
+        </span>
+      </a>
+      <div class="demo-topbar-actions">
+        <a class="demo-back" href="../index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg>
+          <span data-es="Portafolio" data-en="Portfolio">Portafolio</span>
+        </a>
+        <button class="icon-btn" type="button" data-tech-open aria-label="Resumen técnico" title="Resumen técnico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg>
+        </button>
+        <div class="lang-toggle" role="group" aria-label="Idioma">
+          <button type="button" data-lang-btn="es" aria-pressed="true">ES</button>
+          <button type="button" data-lang-btn="en" aria-pressed="false">EN</button>
+        </div>
+        <button class="icon-btn" type="button" data-theme-toggle aria-label="Cambiar tema">
+          <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.6 6.6 0 0 0 9.8 9.8Z"/></svg>
+          <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="demo-disclaimer">
+    <div class="demo-disclaimer-inner">
+      <span><strong data-es="Datos ficticios." data-en="Fictional data.">Datos ficticios.</strong> <span data-es="Sin conexión a bases de datos ni sistemas reales." data-en="No connection to databases or real systems.">Sin conexión a bases de datos ni sistemas reales.</span></span>
+      <span class="disc-note" data-es="Demo interactiva" data-en="Interactive demo">Demo interactiva</span>
+    </div>
+  </div>
+
+  <main class="demo-main">
+    <div class="demo-page-head">
+      <div>
+        <span class="demo-kicker" data-es="Demo · Validación documental" data-en="Demo · Document validation">Demo · Validación documental</span>
+        <h1 class="demo-title" data-es="Control documental de viajes" data-en="Trip document control">Control documental de viajes</h1>
+        <p class="demo-subtitle" data-es="Evidencias de cliente, comprobaciones, repartos y reembarques en un solo expediente." data-en="Customer evidence, expense checks, dispatches and reshipments in a single file.">Evidencias de cliente, comprobaciones, repartos y reembarques en un solo expediente.</p>
+      </div>
+      <div class="demo-actions">
+        <div class="field" style="min-width:180px">
+          <label for="doc-role" data-es="Rol de demostración" data-en="Demo role">Rol de demostración</label>
+          <select id="doc-role">
+            <option value="documentador" data-es="Documentador" data-en="Document clerk">Documentador</option>
+            <option value="jefe" data-es="Jefe de Tráfico" data-en="Traffic lead">Jefe de Tráfico</option>
+            <option value="facturacion" data-es="Facturación" data-en="Billing">Facturación</option>
+            <option value="admin" data-es="Administrador" data-en="Administrator">Administrador</option>
+          </select>
+        </div>
+        <button class="btn btn-secondary btn-sm" type="button" id="doc-reset">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          <span data-es="Reiniciar demo" data-en="Reset demo">Reiniciar demo</span>
+        </button>
+        <button class="btn btn-secondary btn-sm" type="button" data-tech-open>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg>
+          <span data-es="Resumen técnico" data-en="Technical summary">Resumen técnico</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Vistas del documentador">
+      <button type="button" role="tab" data-doc-view="home" aria-selected="true" data-es="Inicio" data-en="Home">Inicio</button>
+      <button type="button" role="tab" data-doc-view="repartos" aria-selected="false" data-es="Repartos" data-en="Dispatches">Repartos</button>
+      <button type="button" role="tab" data-doc-view="reembarques" aria-selected="false" data-es="Reembarques" data-en="Reshipments">Reembarques</button>
+    </div>
+
+    <section id="doc-home" style="margin-top:16px">
+      <div class="panel">
+        <p class="panel-title" data-es="Filtros" data-en="Filters">Filtros</p>
+        <div class="filters-grid">
+          <div class="field span-2">
+            <label for="doc-search" data-es="Buscar viaje, cliente, operador o unidad" data-en="Search trip, customer, operator or unit">Buscar viaje, cliente, operador o unidad</label>
+            <input id="doc-search" type="search" data-es-placeholder="Ej. V-10482, T-101, Cliente Demo" data-en-placeholder="e.g. V-10482, T-101, Demo Customer" placeholder="Ej. V-10482, T-101, Cliente Demo">
+          </div>
+          <div class="field">
+            <label for="doc-status" data-es="Estatus" data-en="Status">Estatus</label>
+            <select id="doc-status">
+              <option value="all" data-es="Todos" data-en="All">Todos</option>
+              <option value="process" data-es="En proceso" data-en="In process">En proceso</option>
+              <option value="ready" data-es="Listo para liquidar" data-en="Ready to settle">Listo para liquidar</option>
+              <option value="settled" data-es="Liquidado" data-en="Settled">Liquidado</option>
+              <option value="finalizado" data-es="Finalizado" data-en="Finished">Finalizado</option>
+              <option value="rejected" data-es="Rechazado" data-en="Rejected">Rechazado</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="doc-type" data-es="Tipo de viaje" data-en="Trip type">Tipo de viaje</label>
+            <select id="doc-type">
+              <option value="all" data-es="Todos" data-en="All">Todos</option>
+              <option value="Cargado" data-es="Cargado" data-en="Loaded">Cargado</option>
+              <option value="Vacío" data-es="Vacío" data-en="Empty">Vacío</option>
+              <option value="Reparto" data-es="Reparto" data-en="Dispatch">Reparto</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="doc-exception" data-es="Excepción" data-en="Exception">Excepción</label>
+            <select id="doc-exception">
+              <option value="all" data-es="Todas" data-en="All">Todas</option>
+              <option value="Cambio Origen Destino" data-es="Cambio Origen Destino" data-en="Origin/destination change">Cambio Origen Destino</option>
+              <option value="Reembarque" data-es="Reembarque" data-en="Reshipment">Reembarque</option>
+              <option value="No realizado" data-es="No realizado" data-en="Not completed">No realizado</option>
+            </select>
+          </div>
+          <div class="filters-actions">
+            <button class="btn btn-sm" type="button" id="doc-clear">
+              <span data-es="Limpiar filtros" data-en="Clear filters">Limpiar filtros</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpis" id="doc-kpis"></div>
+      <div class="info-note" id="doc-role-note" style="margin-bottom:16px"></div>
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 data-es="Viajes" data-en="Trips">Viajes</h2>
+            <p id="doc-count"></p>
+          </div>
+          <button class="btn btn-secondary btn-sm" type="button" id="doc-refresh">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+            <span data-es="Actualizar" data-en="Refresh">Actualizar</span>
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="doc-table">
+            <thead>
+              <tr>
+                <th data-es="Viaje" data-en="Trip">Viaje</th>
+                <th data-es="Unidad" data-en="Unit">Unidad</th>
+                <th data-es="Cliente" data-en="Customer">Cliente</th>
+                <th data-es="Operador" data-en="Operator">Operador</th>
+                <th data-es="Tipo" data-en="Type">Tipo</th>
+                <th data-es="Excepción" data-en="Exception">Excepción</th>
+                <th data-es="Relacionados" data-en="Related">Relacionados</th>
+                <th data-es="Fecha" data-en="Date">Fecha</th>
+                <th data-es="Evidencias" data-en="Evidence">Evidencias</th>
+                <th data-es="Estatus" data-en="Status">Estatus</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="doc-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="doc-ready-panel"></div>
+    </section>
+
+    <section id="doc-detail" hidden></section>
+    <section id="doc-repartos" hidden></section>
+    <section id="doc-reembarques" hidden></section>
+    <section id="doc-reembarque-detail" hidden></section>
+  </main>
+
+  <div class="toast-stack" aria-live="polite"></div>
+
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/ui.js"></script>
+  <script src="../assets/js/mock-data.js"></script>
+  <script src="../assets/js/documentador.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>
